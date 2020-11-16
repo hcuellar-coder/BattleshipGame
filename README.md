@@ -12,4 +12,4 @@ This battleship game is a console application that was built using C#. The purpo
 The player is prompted to select a point on a 10 x 10 grid to fire upon. The point is made up of an X-value and a Y-value that represent one square of the grid. Once the point is selected the player is prompted with a hit or miss. When the screen refreshes the grid will be updated with the players selection marked on the grid. The grid will mark an 'x' as a hit and 'o' for a miss. The player will be given a total of 8 guesses. The game will run until there are no more guesses remaining. After which the player can choose to try again or quit the game.
 
 ## Author
-Heriberto Cuellar – Full Stack Software Developer - [LinkedIn](linkedin.com/in/heriberto-c-5aa11952)
+Heriberto Cuellar – Full Stack Software Developer - [Website](https://heribertocuellar.com) | [LinkedIn](https://www.linkedin.com/in/heriberto-cuellar/)
