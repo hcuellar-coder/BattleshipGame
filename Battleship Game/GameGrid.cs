@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Battleship_Game
 {
-    class GameGrid
+    public class GameGrid
     {
-        static string[,] Grid = new string[11, 11];
-        public static void InitializeGrid()
+        string[,] Grid = new string[11, 11];
+        public void InitializeGrid()
         {
             for (int i = 10; i >= 0; i--)
             {
@@ -32,7 +32,7 @@ namespace Battleship_Game
                 }
             }
         }
-        public static void EditGrid(int Xvalue, int Yvalue, bool hit)
+        public void EditGrid(int Xvalue, int Yvalue, bool hit)
         {
             if (hit)
             {
@@ -44,7 +44,7 @@ namespace Battleship_Game
             }
         }
 
-        public static void PrintGrid()
+        public void PrintGrid()
         {
             for (int i = 10; i >= 0; i--)
             {

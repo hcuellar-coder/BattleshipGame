@@ -10,11 +10,15 @@ namespace Battleship_Game
         static bool Alive = true;
         static bool PlayAgain = false;
         static bool PlayDecision = false;
+
+        private static GameGrid _gameGrid;
         static void Main(string[] args)
         {
+            _gameGrid = new GameGrid();
+
             while(Alive)
             { 
-                GameGrid.InitializeGrid();
+                _gameGrid.InitializeGrid();
                 Battleships.createBattleship();               
                 if (!PlayAgain)
                 {
@@ -56,7 +60,7 @@ namespace Battleship_Game
                 Console.Write("Shots Remaining = " + (8 - shotsFired));
                 Console.Write(" Hits = " + NumberOfHits);
                 Console.Write(" Misses = " + NumberOfMisses + "\n");
-                GameGrid.PrintGrid();
+                _gameGrid.PrintGrid();
                 Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
                 while (!int.TryParse(Console.ReadLine(), out XValue)){
                     Console.Clear();
@@ -64,7 +68,7 @@ namespace Battleship_Game
                     Console.Write("Shots Remaining = " + (8 - shotsFired));
                     Console.Write(" Hits = " + NumberOfHits);
                     Console.Write(" Misses = " + NumberOfMisses + "\n");
-                    GameGrid.PrintGrid();
+                    _gameGrid.PrintGrid();
                     Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
                 }
                 Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
@@ -75,7 +79,7 @@ namespace Battleship_Game
                     Console.Write("Shots Remaining = " + (8 - shotsFired));
                     Console.Write(" Hits = " + NumberOfHits);
                     Console.Write(" Misses = " + NumberOfMisses + "\n");
-                    GameGrid.PrintGrid();
+                    _gameGrid.PrintGrid();
                     Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : " + XValue + "\n");
                     Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
                 }
@@ -110,7 +114,7 @@ namespace Battleship_Game
                             Console.Write("Press Enter to resume!");
                             Console.ReadLine();
                         }
-                        GameGrid.EditGrid(XValue, YValue, GameDecision.DetermineHit(XValue, YValue));
+                        _gameGrid.EditGrid(XValue, YValue, GameDecision.DetermineHit(XValue, YValue));
                         shotsFired++;
                     }
                 }
@@ -119,7 +123,7 @@ namespace Battleship_Game
                 {
                     PlayAgain = false;
                     Console.Clear();
-                    GameGrid.PrintGrid();
+                    _gameGrid.PrintGrid();
                     Console.WriteLine("\nCongratulations!! Youve Sunk the Battleship!");
                     break;
                 }
@@ -131,7 +135,7 @@ namespace Battleship_Game
                     Console.Write("Shots Remaining = " + (8 - shotsFired));
                     Console.Write(" Hits = " + NumberOfHits);
                     Console.Write(" Misses = " + NumberOfMisses + "\n");
-                    GameGrid.PrintGrid();
+                    _gameGrid.PrintGrid();
                     Console.WriteLine("\nYou Lost!");
                     Console.WriteLine("Better Luck Next Time!");
                     break;
