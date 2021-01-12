@@ -77,13 +77,9 @@ namespace Battleship_Game
             }
             return false;
         }
-        public static bool InputValidation(int XValue, int YValue)
+        public static bool InputValidation(int value)
         {
-            if ((XValue > 0 && XValue < 11) && (YValue > 0 && YValue < 11))
-            {
-                return true;
-            }
-            return false;
+            return value > 0 && value < 11;
         }
     }
 }

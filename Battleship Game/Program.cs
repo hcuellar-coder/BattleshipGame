@@ -48,80 +48,95 @@ namespace Battleship_Game
 
         }
 
+        public static int QueryForXFiringPosition(int shotsFired, int numberOfHits, int numberOfMisses)
+        {
+            Console.Write("Shots Remaining = " + (8 - shotsFired));
+            Console.Write(" Hits = " + numberOfHits);
+            Console.Write(" Misses = " + numberOfMisses + "\n");
+            _gameGrid.PrintGrid();
+            Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
+
+            int xValue;
+            bool isValid = int.TryParse(Console.ReadLine(), out xValue) 
+                                && GameDecision.InputValidation(xValue);
+
+            while (isValid == false)
+            {
+                if (GameDecision.InputValidation(xValue) == false)
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nIncorrect Input ensign! Numbers from 1 - 10!!!! Press Enter to resume!\n");
+                    Console.ReadLine();
+                } else
+                {
+                    Console.Clear();
+                    Console.WriteLine("---------Input needs to be a number!!---------\n");
+                    Console.Write("Shots Remaining = " + (8 - shotsFired));
+                    Console.Write(" Hits = " + numberOfHits);
+                    Console.Write(" Misses = " + numberOfMisses + "\n");
+                    _gameGrid.PrintGrid();
+                    Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
+                }
+                isValid = int.TryParse(Console.ReadLine(), out xValue)
+                                && GameDecision.InputValidation(xValue);
+            }
+            return xValue;
+        }
+
         public static void PlayBattleShip()
         {
             int shotsFired = 0;
-            int NumberOfHits = 0;
-            int NumberOfMisses = 0;
+            int numberOfHits = 0;
+            int numberOfMisses = 0;
             int XValue;
             int YValue;
             
             while (true)
             {
                 Console.Clear();
-                Console.Write("Shots Remaining = " + (8 - shotsFired));
-                Console.Write(" Hits = " + NumberOfHits);
-                Console.Write(" Misses = " + NumberOfMisses + "\n");
-                _gameGrid.PrintGrid();
-                Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
-                while (!int.TryParse(Console.ReadLine(), out XValue)){
-                    Console.Clear();
-                    Console.WriteLine("---------Input needs to be a number!!---------\n");
-                    Console.Write("Shots Remaining = " + (8 - shotsFired));
-                    Console.Write(" Hits = " + NumberOfHits);
-                    Console.Write(" Misses = " + NumberOfMisses + "\n");
-                    _gameGrid.PrintGrid();
-                    Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
-                }
+                XValue = QueryForXFiringPosition(shotsFired, numberOfHits, numberOfMisses);
                 Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
                 while (!int.TryParse(Console.ReadLine(), out YValue))
                 {
                     Console.Clear();
                     Console.WriteLine("---------Input needs to be a number!!---------\n");
                     Console.Write("Shots Remaining = " + (8 - shotsFired));
-                    Console.Write(" Hits = " + NumberOfHits);
-                    Console.Write(" Misses = " + NumberOfMisses + "\n");
+                    Console.Write(" Hits = " + numberOfHits);
+                    Console.Write(" Misses = " + numberOfMisses + "\n");
                     _gameGrid.PrintGrid();
                     Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : " + XValue + "\n");
                     Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
                 }
 
-                if (!GameDecision.InputValidation(XValue, YValue))
+             
+                if (GameDecision.DetermineIfGuessed(XValue, YValue, shotsFired))
                 {
-                    Console.Clear();
-                    Console.WriteLine("\nIncorrect Input ensign! Numbers from 1 - 10!!!! Press Enter to resume!\n");
+                    Console.Write("\nRookie mistake ensign! Choose a spot you haven't already shot at! Press Enter to resume!");
                     Console.ReadLine();
+                    Console.Clear();
                 } 
-                else 
+                else
                 {
-                    if (GameDecision.DetermineIfGuessed(XValue, YValue, shotsFired))
+                    if (GameDecision.DetermineHit(XValue, YValue))
                     {
-                        Console.Write("\nRookie mistake ensign! Choose a spot you haven't already shot at! Press Enter to resume!");
+                        numberOfHits++;
+                        Console.WriteLine("\nHit!\n");
+                        Console.Write("Press Enter to resume!");
                         Console.ReadLine();
-                        Console.Clear();
-                    } 
+                    }
                     else
                     {
-                        if (GameDecision.DetermineHit(XValue, YValue))
-                        {
-                            NumberOfHits++;
-                            Console.WriteLine("\nHit!\n");
-                            Console.Write("Press Enter to resume!");
-                            Console.ReadLine();
-                        }
-                        else
-                        {
-                            NumberOfMisses++;
-                            Console.WriteLine("\nMiss!\n");
-                            Console.Write("Press Enter to resume!");
-                            Console.ReadLine();
-                        }
-                        _gameGrid.EditGrid(XValue, YValue, GameDecision.DetermineHit(XValue, YValue));
-                        shotsFired++;
+                        numberOfMisses++;
+                        Console.WriteLine("\nMiss!\n");
+                        Console.Write("Press Enter to resume!");
+                        Console.ReadLine();
                     }
+                    _gameGrid.EditGrid(XValue, YValue, GameDecision.DetermineHit(XValue, YValue));
+                    shotsFired++;
                 }
+                
 
-                if (NumberOfHits == 5)
+                if (numberOfHits == 5)
                 {
                     PlayAgain = false;
                     Console.Clear();
@@ -135,14 +150,14 @@ namespace Battleship_Game
                     PlayAgain = false;
                     Console.Clear();
                     Console.Write("Shots Remaining = " + (8 - shotsFired));
-                    Console.Write(" Hits = " + NumberOfHits);
-                    Console.Write(" Misses = " + NumberOfMisses + "\n");
+                    Console.Write(" Hits = " + numberOfHits);
+                    Console.Write(" Misses = " + numberOfMisses + "\n");
                     _gameGrid.PrintGrid();
                     Console.WriteLine("\nYou Lost!");
                     Console.WriteLine("Better Luck Next Time!");
                     break;
                 }
-                else if (shotsFired == 4 && NumberOfMisses == 4)
+                else if (shotsFired == 4 && numberOfMisses == 4)
                 {
                     bool restart = false;                
                     while (true)
