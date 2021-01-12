@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Battleship_Game
 {
-    class Prompts
+    public class Prompts
     {
-        public static bool GameIntro()
+        private GameGrid _gameGrid;
+        public Prompts(GameGrid gameGrid)
+        {
+            _gameGrid = gameGrid;
+        }
+        public bool GameIntro()
         {
             while (true)
             {
@@ -30,7 +33,7 @@ namespace Battleship_Game
                 }
             }
         }
-        public static bool PlayAgainPrompt()
+        public bool PlayAgainPrompt()
         {
             while (true)
             {
@@ -53,7 +56,7 @@ namespace Battleship_Game
                 }
             }
         }
-        public static bool Tutorial()
+        public bool Tutorial()
         {
             while (true)
             {
@@ -67,7 +70,7 @@ namespace Battleship_Game
                     Console.WriteLine("The Game is simple, you will be prompted to select a point on a 10 x 10 grid.");
                     Console.WriteLine("The point is made up of an X-value and a Y-value that represent one square of the grid...Please see below");
                     Console.WriteLine("\n");
-                    GameGrid.PrintGrid();
+                    _gameGrid.PrintGrid();
                     Console.WriteLine("\n");
                     Console.WriteLine("Once the point is selected you will be prompted with a hit or miss.");
                     Console.WriteLine("You will be given a total of 8 guesses. If you do not destroy the enemy vessel...");

@@ -12,9 +12,11 @@ namespace Battleship_Game
         static bool PlayDecision = false;
 
         private static GameGrid _gameGrid;
+        private static Prompts _prompts;
         static void Main(string[] args)
         {
             _gameGrid = new GameGrid();
+            _prompts = new Prompts(_gameGrid);
 
             while(Alive)
             { 
@@ -22,17 +24,17 @@ namespace Battleship_Game
                 Battleships.createBattleship();               
                 if (!PlayAgain)
                 {
-                    PlayDecision = Prompts.GameIntro();
+                    PlayDecision = _prompts.GameIntro();
                 }
                 if (PlayDecision || PlayAgain)
                 {
-                    bool tutorialDecision = Prompts.Tutorial();
+                    bool tutorialDecision = _prompts.Tutorial();
                     if (tutorialDecision)
                     {
                         PlayBattleShip();
                         if (!PlayAgain)
                         {
-                            Alive = Prompts.PlayAgainPrompt();
+                            Alive = _prompts.PlayAgainPrompt();
                             PlayAgain = Alive;
                         } 
                         else
