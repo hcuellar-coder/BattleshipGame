@@ -83,6 +83,41 @@ namespace Battleship_Game
             return xValue;
         }
 
+        public static int QueryForYFiringPosition(int shotsFired, int numberOfHits, int numberOfMisses, int xValue)
+        {
+            Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
+
+            int yValue;
+            bool isValid = int.TryParse(Console.ReadLine(), out yValue)
+                                && GameDecision.InputValidation(yValue);
+
+            while (isValid == false)
+            {
+                if (GameDecision.InputValidation(yValue) == false)
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nIncorrect Input ensign! Numbers from 1 - 10!!!! Press Enter to resume!\n");
+                    Console.ReadLine();
+                } else 
+                {
+                    Console.Clear();
+                    Console.WriteLine("---------Input needs to be a number!!---------\n");
+                    Console.Write("Shots Remaining = " + (8 - shotsFired));
+                    Console.Write(" Hits = " + numberOfHits);
+                    Console.Write(" Misses = " + numberOfMisses + "\n");
+                    _gameGrid.PrintGrid();
+                    Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : " + xValue + "\n");
+                    Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
+                }
+
+                isValid = int.TryParse(Console.ReadLine(), out yValue)
+                                && GameDecision.InputValidation(yValue);
+            }
+            
+            return yValue;
+        }
+
+
         public static void PlayBattleShip()
         {
             int shotsFired = 0;
@@ -95,18 +130,8 @@ namespace Battleship_Game
             {
                 Console.Clear();
                 XValue = QueryForXFiringPosition(shotsFired, numberOfHits, numberOfMisses);
-                Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
-                while (!int.TryParse(Console.ReadLine(), out YValue))
-                {
-                    Console.Clear();
-                    Console.WriteLine("---------Input needs to be a number!!---------\n");
-                    Console.Write("Shots Remaining = " + (8 - shotsFired));
-                    Console.Write(" Hits = " + numberOfHits);
-                    Console.Write(" Misses = " + numberOfMisses + "\n");
-                    _gameGrid.PrintGrid();
-                    Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : " + XValue + "\n");
-                    Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
-                }
+                YValue = QueryForYFiringPosition(shotsFired, numberOfHits, numberOfMisses, XValue);
+                
 
              
                 if (GameDecision.DetermineIfGuessed(XValue, YValue, shotsFired))
