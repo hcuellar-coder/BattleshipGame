@@ -18,7 +18,7 @@ namespace Battleship_Game
         {
             _gameGrid = new GameGrid();
             _prompts = new Prompts(_gameGrid);
-            _gameLogic = new GameLogic();
+            _gameLogic = new GameLogic(_gameGrid);
 
             while(Alive)
             { 
@@ -33,7 +33,7 @@ namespace Battleship_Game
                     bool tutorialDecision = _prompts.Tutorial();
                     if (tutorialDecision)
                     {
-                        _gameLogic.PlayBattleShip();
+                        PlayAgain = _gameLogic.PlayBattleShip();
                         if (!PlayAgain)
                         {
                             Alive = _prompts.PlayAgainPrompt();
