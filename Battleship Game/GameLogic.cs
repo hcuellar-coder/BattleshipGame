@@ -6,7 +6,12 @@ namespace Battleship_Game
 {
     public class GameLogic
     {
+        public int ShotsFired { get; private set; } = 0;
+        public int NumberOfHits { get; private set; } = 0;
+        public int NumberOfMisses { get; private set; } = 0;
+
         private GameGrid _gameGrid;
+        private const int MAX_GUESSES = 8;
 
         public GameLogic(GameGrid gameGrid)
         {
@@ -15,9 +20,6 @@ namespace Battleship_Game
 
         public bool PlayBattleShip()
         {
-            int shotsFired = 0;
-            int numberOfHits = 0;
-            int numberOfMisses = 0;
             int XValue;
             int YValue;
 
@@ -26,12 +28,12 @@ namespace Battleship_Game
             while (true)
             {
                 Console.Clear();
-                XValue = QueryForXFiringPosition(shotsFired, numberOfHits, numberOfMisses);
-                YValue = QueryForYFiringPosition(shotsFired, numberOfHits, numberOfMisses, XValue);
+                XValue = QueryForXFiringPosition();
+                YValue = QueryForYFiringPosition(XValue);
 
 
 
-                if (GameDecision.DetermineIfGuessed(XValue, YValue, shotsFired))
+                if (GameDecision.DetermineIfGuessed(XValue, YValue, ShotsFired))
                 {
                     Console.Write("\nRookie mistake ensign! Choose a spot you haven't already shot at! Press Enter to resume!");
                     Console.ReadLine();
@@ -41,24 +43,24 @@ namespace Battleship_Game
                 {
                     if (GameDecision.DetermineHit(XValue, YValue))
                     {
-                        numberOfHits++;
+                        NumberOfHits++;
                         Console.WriteLine("\nHit!\n");
                         Console.Write("Press Enter to resume!");
                         Console.ReadLine();
                     }
                     else
                     {
-                        numberOfMisses++;
+                        NumberOfMisses++;
                         Console.WriteLine("\nMiss!\n");
                         Console.Write("Press Enter to resume!");
                         Console.ReadLine();
                     }
                     _gameGrid.EditGrid(XValue, YValue, GameDecision.DetermineHit(XValue, YValue));
-                    shotsFired++;
+                    ShotsFired++;
                 }
 
 
-                if (numberOfHits == 5)
+                if (NumberOfHits == (MAX_GUESSES / 2)+1)
                 {
                     playAgain = false;
                     Console.Clear();
@@ -66,17 +68,17 @@ namespace Battleship_Game
                     Console.WriteLine("\nCongratulations!! Youve Sunk the Battleship!");
                     break;
                 }
-                else if (shotsFired == 8)
+                else if (ShotsFired == MAX_GUESSES)
                 {
 
                     playAgain = false;
                     Console.Clear();
-                    PrintSummary(shotsFired, numberOfHits, numberOfMisses);
+                    PrintSummary();
                     Console.WriteLine("\nYou Lost!");
                     Console.WriteLine("Better Luck Next Time!");
                     break;
                 }
-                else if (shotsFired == 4 && numberOfMisses == 4)
+                else if ((ShotsFired == (MAX_GUESSES / 2)) && (NumberOfMisses == (MAX_GUESSES / 2)))
                 {
                     bool restart = false;
                     while (true)
@@ -109,12 +111,15 @@ namespace Battleship_Game
                     }
                 }
             }
+            ShotsFired = 0;
+            NumberOfHits = 0;
+            NumberOfMisses = 0;
             return playAgain;
         }
 
-        public int QueryForXFiringPosition(int shotsFired, int numberOfHits, int numberOfMisses)
+        public int QueryForXFiringPosition()
         {
-            PrintSummary(shotsFired, numberOfHits, numberOfMisses);
+            PrintSummary();
             Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
 
             int xValue;
@@ -134,14 +139,14 @@ namespace Battleship_Game
                     Console.WriteLine("---------Input needs to be a number!!---------\n");
                     
                 }
-                PrintSummary(shotsFired, numberOfHits, numberOfMisses);
+                PrintSummary();
                 Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : ");
                 isValid = int.TryParse(Console.ReadLine(), out xValue) && GameDecision.InputValidation(xValue);
             }
             return xValue;
         }
 
-        public int QueryForYFiringPosition(int shotsFired, int numberOfHits, int numberOfMisses, int xValue)
+        public int QueryForYFiringPosition(int xValue)
         {
             Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
 
@@ -161,7 +166,7 @@ namespace Battleship_Game
                     Console.Clear();
                     Console.WriteLine("---------Input needs to be a number!!---------\n");
                 }
-                PrintSummary(shotsFired, numberOfHits, numberOfMisses);
+                PrintSummary();
                 Console.Write("\n(X-axis) - Select a spot [1-10] to fire upon : " + xValue + "\n");
                 Console.Write("\n(Y-axis) - Select a spot [1-10] to fire upon : ");
                 isValid = int.TryParse(Console.ReadLine(), out yValue) && GameDecision.InputValidation(yValue);
@@ -170,11 +175,11 @@ namespace Battleship_Game
             return yValue;
         }
 
-        public void PrintSummary(int shotsFired, int numberOfHits, int numberOfMisses)
+        public void PrintSummary()
         {
-            Console.Write("Shots Remaining = " + (8 - shotsFired));
-            Console.Write(" Hits = " + numberOfHits);
-            Console.Write(" Misses = " + numberOfMisses + "\n");
+            Console.Write("Shots Remaining = " + (MAX_GUESSES - ShotsFired));
+            Console.Write(" Hits = " + NumberOfHits);
+            Console.Write(" Misses = " + NumberOfMisses + "\n");
             _gameGrid.PrintGrid();
         }
 
